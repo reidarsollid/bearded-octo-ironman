@@ -1,0 +1,24 @@
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+version = '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(ScalaCompile) {
+  scalaCompileOptions.useAnt = false
+}
+
+dependencies {
+  compile 'org.scala-lang:scala-library:2.10.2'
+}
+
+dependencies {    
+    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.10.2'
+    compile group: 'com.typesafe.akka', name: 'akka-actor_2.10', version: '2.2.1'
+    compile group: 'com.typesafe.akka', name: 'akka-testkit_2.10', version: '2.2.1'
+    testCompile group: 'org.scalatest', name: 'scalatest_2.10', version: '2.0.M5b'
+}
+

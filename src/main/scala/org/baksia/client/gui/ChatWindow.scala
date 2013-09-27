@@ -7,11 +7,11 @@ import akka.actor.ActorSystem
 import akka.actor.Props
 
 case class MessageEvent(message: String) extends Event
+case class ServerMessage(message: String) 
 
 object ChatWindow extends SimpleSwingApplication {
 
   val clientHandler = ActorSystem("ClientSystem").actorOf(Props[ClientHandler])
-
   def top = new MainFrame {
     title = "Scakka"
     object sendButton extends Button {
@@ -39,8 +39,7 @@ object ChatWindow extends SimpleSwingApplication {
     listenTo(sendButton)
     reactions += {
       case ButtonClicked(sendButton) =>
-        println(messageField.text)
-        clientHandler ! messageField.text
+        `clientHandler` ! ServerMessage(messageField.text)
         messagesArea.append("\n" + messageField.text)
       case MessageEvent(message) =>
         messagesArea.append(message)

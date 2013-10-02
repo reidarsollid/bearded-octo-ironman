@@ -11,8 +11,9 @@ case class ServerMessage(message: String)
 
 object ChatWindow extends SimpleSwingApplication {
   val actorSystem = ActorSystem("ClientSystem")
-  val clientHandler = actorSystem.actorOf(Props[ClientHandler])
-  val connector = actorSystem.actorOf(Props(classOf[ClientConnector], clientHandler))
+  val publisher = new MessagePublisher()
+  val clientHandler = actorSystem.actorOf(Props(classOf[ClientHandler], publisher), "ClientHandler")
+  val connector = actorSystem.actorOf(Props(classOf[ClientConnector], clientHandler), "clientConnector")
   
   def top = new MainFrame {
     title = "Scakka"
@@ -38,13 +39,13 @@ object ChatWindow extends SimpleSwingApplication {
       border = Swing.EmptyBorder(10)
     }
 
-    listenTo(sendButton)
+    listenTo(sendButton,publisher)
     reactions += {
       case ButtonClicked(sendButton) =>
-        `clientHandler` ! ServerMessage(messageField.text)
-        messagesArea.append("\n" + messageField.text)
+        `connector` ! ServerMessage(messageField.text)        
       case MessageEvent(message) =>
-        messagesArea.append(message)
+        println(s"ChatWindod Received message ${message}")
+        messagesArea.append("\n" + "Server: "+ message)
     }
   }
 }

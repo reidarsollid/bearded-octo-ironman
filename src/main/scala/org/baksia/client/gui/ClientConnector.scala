@@ -6,6 +6,7 @@ import akka.io.IO
 import java.net.InetSocketAddress
 import akka.actor.ActorRef
 import akka.util.ByteString
+import scala.swing.Publisher
 
 class ClientConnector(handler: ActorRef) extends Actor {
   import Tcp._
@@ -19,15 +20,11 @@ class ClientConnector(handler: ActorRef) extends Actor {
       println(s"Client connected to remote ${remote}")      
       val connection = sender
       connection ! Register(handler)
-      /*context become {
-        case data : ByteString =>
-          println(s"Client received ByteStrin ${data}")
-        case Received(data) =>
-          println("Received")
+      context become {  
         case ServerMessage(message) =>
-          println(s"Connector Sending message ${message}")
-          connection ! ByteString(message)
-      }*/
+          println(s"Connector Sending message ${message} to ${connection.path}")
+          connection ! Write(ByteString(message))
+      }
     case CommandFailed =>
       handler ! "failed"
       context stop self

@@ -9,34 +9,33 @@ import akka.actor.Props
 import akka.io.IO
 import java.net.InetSocketAddress
 
+case class NewClient(client: Set[ActorRef])
 
 class Server extends Actor {
   import Tcp._
   import context.system
   
   IO(Tcp)!  Bind(self, new InetSocketAddress("localhost", 1111))
-  
+  var clientSet = Set.empty[ActorRef]
+  var handlerSet = Set.empty[ActorRef]
   def receive = {
     case b @ Bound(localaddress) =>
-      println(s"local address is ${localaddress}")
+      println(s"local address is bound ${localaddress}")
     
     case CommandFailed(_: Bind) => context stop self
 
-    case Connected(remote, local) =>
+    case c @ Connected(remote, local) =>      
       println(s"Connected Remote : ${remote} and local : ${local}" )
       val handler = context.actorOf(Props[ServerHandler])
       val connection = sender
+      clientSet += connection
+      handlerSet += handler
+      handlerSet.foreach(h => h !  NewClient(clientSet) )      
       connection ! Register(handler)
-      //Register server handler
-      //Add to list of receivers      
-  }
-
-  def sendToAll(data: ByteString, sender: ActorRef) = {
-    //Send to all except sender
   }
 }
 
 object ServerMain extends App {
-  ActorSystem("ServerScakkaSystem").actorOf(Props[Server])
+  ActorSystem("ServerScakkaSystem").actorOf(Props[Server], "Server")
 }
 

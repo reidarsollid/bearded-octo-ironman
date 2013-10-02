@@ -7,11 +7,13 @@ import akka.actor.ActorSystem
 import akka.actor.Props
 
 case class MessageEvent(message: String) extends Event
-case class ServerMessage(message: String) 
+case class ServerMessage(message: String)
 
 object ChatWindow extends SimpleSwingApplication {
-
-  val clientHandler = ActorSystem("ClientSystem").actorOf(Props[ClientHandler])
+  val actorSystem = ActorSystem("ClientSystem")
+  val clientHandler = actorSystem.actorOf(Props[ClientHandler])
+  val connector = actorSystem.actorOf(Props(classOf[ClientConnector], clientHandler))
+  
   def top = new MainFrame {
     title = "Scakka"
     object sendButton extends Button {

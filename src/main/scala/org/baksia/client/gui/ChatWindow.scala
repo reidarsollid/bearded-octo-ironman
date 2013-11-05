@@ -2,11 +2,11 @@ package org.baksia.client.gui
 
 import swing._
 import event._
-import akka.actor.Actor
 import akka.actor.ActorSystem
 import akka.actor.Props
 
 case class MessageEvent(message: String) extends Event
+
 case class ServerMessage(message: String)
 
 object ChatWindow extends SimpleSwingApplication {
@@ -14,9 +14,10 @@ object ChatWindow extends SimpleSwingApplication {
   val publisher = new MessagePublisher()
   val clientHandler = actorSystem.actorOf(Props(classOf[ClientHandler], publisher), "ClientHandler")
   val connector = actorSystem.actorOf(Props(classOf[ClientConnector], clientHandler), "clientConnector")
-  
+
   def top = new MainFrame {
     title = "Scakka"
+
     object sendButton extends Button {
       text = "Send"
     }
@@ -39,13 +40,13 @@ object ChatWindow extends SimpleSwingApplication {
       border = Swing.EmptyBorder(10)
     }
 
-    listenTo(sendButton,publisher)
+    listenTo(sendButton, publisher)
     reactions += {
       case ButtonClicked(sendButton) =>
-        `connector` ! ServerMessage(messageField.text)        
+        `connector` ! ServerMessage(messageField.text)
       case MessageEvent(message) =>
         println(s"ChatWindod Received message ${message}")
-        messagesArea.append("\n" + "Server: "+ message)
+        messagesArea.append("\n" + "Server: " + message)
     }
   }
 }

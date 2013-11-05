@@ -7,21 +7,23 @@ import akka.actor.ActorRef
 
 class ServerHandler extends Actor {
   var clientSet = Set.empty[ActorRef]
+
   import Tcp._
+
   def receive = {
     case Received(data) =>
       val message = data.utf8String
       println(s"Received data ${message}")
-      sendToAll( data)
+      sendToAll(data)
     case PeerClosed =>
       println("Peer closed")
       context stop self
-    case NewClient(client) =>
+    case NewClientSet(client) =>
       clientSet = client
       println(clientSet)
   }
 
-  def sendToAll(  data: ByteString) = {
+  def sendToAll(data: ByteString) = {
     clientSet.filter(_ != sender).foreach(c => c ! Write(data))
   }
 }

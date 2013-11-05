@@ -8,10 +8,9 @@ import akka.util.ByteString
 class ClientHandler(guiSender: Publisher) extends Actor {
 
   import Tcp._
-  import context.system
-  
+
   val connection = sender
-  
+
   def receive = {
     case Register => println("Handler registered")
     case Received(data) =>

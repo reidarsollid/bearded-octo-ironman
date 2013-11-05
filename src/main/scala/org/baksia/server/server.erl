@@ -2,7 +2,7 @@
 
 -export ([start/0]).
 
-start() ->
+start() -> 
 	{ok, LSock} = gen_tcp:listen(1111, [binary, {packet, 0}, {active, false}]),
 	{ok, Sock} = gen_tcp:accept(LSock),
 	{ok, Bin} = do_recv(Sock),
@@ -14,7 +14,9 @@ do_recv(Sock) ->
 		{ok, B} ->
 			io:format(B),
 			io:format("~n"),
+			gen_tcp:send(Sock, B),
 			do_recv(Sock);
 		{error, closed} ->
 			{ok, farewell}
 	end.
+	

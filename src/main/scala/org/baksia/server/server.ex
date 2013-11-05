@@ -2,8 +2,9 @@ defmodule Server do
 	def run do
 		{ :ok, lsock } = :gen_tcp.listen( 1111, [ :binary, { :packet, 0 }, { :active, false }])
 		{ :ok, sock } = :gen_tcp.accept(lsock)
-		{ :ok, :farewell } = do_recv( sock )
+		{ :ok, bin } = do_recv( sock )
 		:ok = :gen_tcp.close(sock)
+		bin
 	end
 	
 	def do_recv(sock) do

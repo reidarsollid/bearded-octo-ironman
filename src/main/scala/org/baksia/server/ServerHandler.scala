@@ -1,7 +1,6 @@
 package org.baksia.server
 
 import akka.actor.{Actor, ActorRef}
-import akka.io.Tcp
 import akka.util.ByteString
 
 class ServerHandler extends Actor {

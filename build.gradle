@@ -13,13 +13,12 @@ tasks.withType(ScalaCompile) {
 }
 
 dependencies {
-  compile 'org.scala-lang:scala-library:2.10.2'
+  compile 'org.scala-lang:scala-library:2.11.1'
 }
 
-dependencies {    
-    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.10.2'
-    compile group: 'com.typesafe.akka', name: 'akka-actor_2.10', version: '2.2.1'
-    compile group: 'com.typesafe.akka', name: 'akka-testkit_2.10', version: '2.2.1'
-    testCompile group: 'org.scalatest', name: 'scalatest_2.10', version: '2.0.M5b'
+dependencies {
+    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.11.0-M7'
+    compile group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: '2.3.4'
+    compile group: 'com.typesafe.akka', name: 'akka-testkit_2.11', version: '2.3.4'
+    testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '2.2.0'
 }
-

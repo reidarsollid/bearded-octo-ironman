@@ -28,7 +28,5 @@ class ClientConnector(handler: ActorRef) extends Actor {
     case CommandFailed =>
       handler ! "failed"
       context stop self
-      
-      
   }
 }

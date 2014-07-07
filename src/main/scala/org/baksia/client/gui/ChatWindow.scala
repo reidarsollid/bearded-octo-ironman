@@ -1,9 +1,9 @@
 package org.baksia.client.gui
 
-import swing._
-import event._
-import akka.actor.ActorSystem
-import akka.actor.Props
+import akka.actor.{ActorSystem, Props}
+
+import scala.swing._
+import scala.swing.event._
 
 case class MessageEvent(message: String) extends Event
 
@@ -45,7 +45,7 @@ object ChatWindow extends SimpleSwingApplication {
       case ButtonClicked(sendButton) =>
         `connector` ! ServerMessage(messageField.text)
       case MessageEvent(message) =>
-        println(s"ChatWindod Received message ${message}")
+        println(s"ChatWindow Received message $message")
         messagesArea.append("\n" + "Server: " + message)
     }
   }

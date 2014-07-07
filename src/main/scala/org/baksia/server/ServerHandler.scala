@@ -1,19 +1,18 @@
 package org.baksia.server
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import akka.io.Tcp
 import akka.util.ByteString
-import akka.actor.ActorRef
 
 class ServerHandler extends Actor {
   var clientSet = Set.empty[ActorRef]
 
-  import Tcp._
+  import akka.io.Tcp._
 
   def receive = {
     case Received(data) =>
       val message = data.utf8String
-      println(s"Received data ${message}")
+      println(s"Received data $message")
       sendToAll(data)
     case PeerClosed =>
       println("Peer closed")

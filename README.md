@@ -1,1 +1,0 @@
-#Scakka readme
